@@ -5,7 +5,7 @@ public class IKFootSolver : MonoBehaviour
     [SerializeField] private LayerMask terrainLayer;
     [SerializeField] private Transform hips;
 
-    private Vector3 initialOffset;
+    public Vector3 initialOffset;
 
     private void Start()
     {
@@ -14,11 +14,17 @@ public class IKFootSolver : MonoBehaviour
 
     void Update()
     {
-        Ray ray = new Ray(hips.position + (hips.right * initialOffset.x), Vector3.down);
-        if (Physics.Raycast(ray, out RaycastHit hitInfo, 2, terrainLayer))
+        Ray ray = new Ray(hips.position + (hips.forward * -initialOffset.x), Vector3.down);
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, 1, terrainLayer))
         {
-            transform.position = hitInfo.point + initialOffset;
+            Debug.DrawLine(ray.origin, hitInfo.point, Color.green);
+
+            Vector3 newPosition = hitInfo.point + transform.up * initialOffset.y;
+            
+            transform.position = newPosition;
             transform.up = hitInfo.normal;
+            
+            Debug.DrawLine(ray.origin, newPosition, Color.magenta);
         }
     }
 }
