@@ -4,27 +4,27 @@ public class IKFootSolver : MonoBehaviour
 {
     [SerializeField] private LayerMask terrainLayer;
     [SerializeField] private Transform hips;
+    [SerializeField] private Transform ankleIK;
 
-    public Vector3 initialOffset;
+    private Vector3 initialFootOffset;
+    private Vector3 initialAnkleOffset;
 
     private void Start()
     {
-        initialOffset = transform.localPosition;
+        initialFootOffset = transform.localPosition;
+        initialAnkleOffset = ankleIK.localPosition;
     }
 
     void Update()
     {
-        Ray ray = new Ray(hips.position + (hips.forward * -initialOffset.x), Vector3.down);
+        Ray ray = new Ray(hips.position + (hips.forward * -initialAnkleOffset.x), Vector3.down);
         if (Physics.Raycast(ray, out RaycastHit hitInfo, 1, terrainLayer))
         {
-            Debug.DrawLine(ray.origin, hitInfo.point, Color.green);
-
-            Vector3 newPosition = hitInfo.point + transform.up * initialOffset.y;
-            
-            transform.position = newPosition;
+            transform.position = hitInfo.point + Vector3.forward * initialFootOffset.z;
             transform.up = hitInfo.normal;
             
-            Debug.DrawLine(ray.origin, newPosition, Color.magenta);
+            Vector3 newPosition = hitInfo.point + Vector3.up * initialAnkleOffset.y;
+            ankleIK.position = newPosition;
         }
     }
 }
