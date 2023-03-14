@@ -6,8 +6,8 @@ public class IKFootSolver : MonoBehaviour
     [SerializeField] private Transform hips;
     [SerializeField] private Transform ankleIK;
 
-    public Vector3 initialFootOffset;
-    public Vector3 initialAnkleOffset;
+    private Vector3 initialFootOffset;
+    private Vector3 initialAnkleOffset;
 
     private void Start()
     {
